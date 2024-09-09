@@ -4,19 +4,21 @@ import { useParams } from "react-router-dom";
 import {
     BsGraphUp,
     BsWallet2,
-    BsHourGlassSplit,
+    // BsHourGlassSplit,
     BsFillFileEarmarkTextFill
 } from "react-icons/bs";
+
+import { IoIosTime } from "react-icons/io";
 
 import MovieCard from "../components/MovieCard";
 
 import "./movie.css";
 
-const movieURL = import.meta.VITE_API;
-const apiKey = import.meta.VITE_API_KEY;
+const movieURL = import.meta.env.VITE_API;
+const apiKey = import.meta.env.VITE_API_KEY;
 
 const Movie= () => {
-    const {url} = useParams()
+    const {id} = useParams()
     const [movie, setMovie] = useState(null)
 
     const getMovie = async(url) => {
@@ -27,6 +29,9 @@ const Movie= () => {
     };
 
     const formatCurrency = (number) => {
+        if (typeof number !== 'number' || isNaN(number)) {
+            throw new TypeError('The input must be a valid number');
+        }
         return number.toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
@@ -34,9 +39,9 @@ const Movie= () => {
     };
 
     useEffect(() => {
-        const movieUrl = `${movieURL}${id}?${apiKey}`
-        getMovie(movieURL)
-}, [])
+        const movieUrl = `${movieURL}${id}?${apiKey}`;
+        getMovie(movieUrl)
+}, []);
 
     return(
     <div className="movie-page">
@@ -58,7 +63,7 @@ const Movie= () => {
             </div>
             <div className="info">
                 <h3>
-                    <BsHourGlassSplit/>Duração:
+                <IoIosTime />Duração:
                 </h3>
                 <p>{movie.runtime} minutos</p>
             </div>
@@ -71,7 +76,7 @@ const Movie= () => {
         </>
         )}
     </div>    
-    )
-}
+    );
+;}
 
 export default Movie;
